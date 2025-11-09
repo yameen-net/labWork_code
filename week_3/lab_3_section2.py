@@ -1,45 +1,42 @@
+
 import hashlib
 import bcrypt
+import time
 
-def md5_hash(password):
-    return hashlib.md5(password.encode()).hexdigest()
 
-def sha256_hash(password):
-    return hashlib.sha256(password.encode()).hexdigest()
+pwd = input("Enter a password to test (or press Enter for default): ").strip()
+if pwd == "":
+    pwd = "MyPassw0rd123"
 
-def bcrypt_hash(password, rounds=12):
-    # bcrypt.gensalt creates a random salt and includes the cost
-    salt = bcrypt.gensalt(rounds)
-    hashed = bcrypt.hashpw(password.encode(), salt)
-    return hashed.decode()
+print("\n=== HASHING DEMO: MD5 vs SHA-256 vs bcrypt ===")
+print(f"Testing password: {pwd}\n")
 
-def bcrypt_check(password, stored_hash):
-    return bcrypt.checkpw(password.encode(), stored_hash.encode())
+# MD5 
+t0 = time.perf_counter()
+md5_hash = hashlib.md5(pwd.encode("utf-8")).hexdigest()
+t1 = time.perf_counter()
+print("[MD5]")
+print(" hash:", md5_hash)
+print(f" time: {(t1 - t0) * 1000:.3f} ms\n")
 
-def main():
-    print("=== Simple Password Hashing Demo ===")
-    pw = input("Enter a password to hash: ")
+# SHA-256 
+t0 = time.perf_counter()
+sha256_hash = hashlib.sha256(pwd.encode("utf-8")).hexdigest()
+t1 = time.perf_counter()
+print("[SHA-256]")
+print(" hash:", sha256_hash)
+print(f" time: {(t1 - t0) * 1000:.3f} ms\n")
 
-    md5_h = md5_hash(pw)
-    sha_h = sha256_hash(pw)
-    b_h = bcrypt_hash(pw)  # bcrypt includes its salt inside the result
+#bcrypt
 
-    print("\nHashes:")
-    print("MD5:     ", md5_h)
-    print("SHA-256: ", sha_h)
-    print("bcrypt:  ", b_h)
+cost = 12
+print(f"[bcrypt] (work factor = {cost})")
+t0 = time.perf_counter()
+salt = bcrypt.gensalt(rounds=cost)            # random salt + parameter bundle
+bcrypt_hash = bcrypt.hashpw(pwd.encode("utf-8"), salt) 
+t1 = time.perf_counter()
+print(" hash:", bcrypt_hash.decode())
+print(f" time: {(t1 - t0):.3f} s\n")
 
-    # show bcrypt generates different hash each time (because of random salt)
-    b_h2 = bcrypt_hash(pw)
-    print("\nbcrypt again (different because salt changes):")
-    print("bcrypt #2:", b_h2)
 
-    # verification example
-    attempt = input("\nRe-enter password to verify against first bcrypt hash: ")
-    if bcrypt_check(attempt, b_h):
-        print("Login: success ✅")
-    else:
-        print("Login: failure ❌")
 
-if __name__ == "__main__":
-    main()
