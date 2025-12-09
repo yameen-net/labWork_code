@@ -8,7 +8,7 @@ def compute_hash(path, algorithm):
     return h.hexdigest()
 
 
-sample = r"C:\Users\moham\Downloads\ProcessMonitor/Procmon.exe"
+sample = "C:/Users/moham/Downloads/ProcessMonitor/Procmon.exe"
 
 # print("MD5: ", compute_hash(sample, "md5"))
 # print("SHA1: ", compute_hash(sample, "sha1"))

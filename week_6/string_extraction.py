@@ -1,4 +1,7 @@
 import re
+
+sample = "C:/Users/moham/Downloads/ProcessMonitor/Procmon.exe"
+
 def extract_strings(path):
     with open(path, "rb") as f:
         data = f.read()

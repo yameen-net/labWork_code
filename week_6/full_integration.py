@@ -1,6 +1,6 @@
 import hashlib, pefile, re, yara
 
-sample = "C:\Users\moham\Downloads\ProcessMonitor/Procmon.exe"
+sample = "C:/Users/moham/Downloads/ProcessMonitor/Procmon.exe"
 
 
 def compute_hashes(path):
